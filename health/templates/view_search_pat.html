@@ -1,0 +1,78 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+
+<div class="container-fluid" style="width:90%;margin-top:8%">
+    <div class="container-fluid">
+        <h1 align="center" class="w3ls-title text-uppercase text-dark font-weight-bold">Search Logs</h1>
+    </div>
+    <hr>
+
+    <div class="table-responsive">
+        <table id="example" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    {% if request.user.patient_set.all.0 %}
+                        <th>Date</th>
+                    {% else %}
+                        <th>Patient Name</th>
+                    {% endif %}
+                    <th>Probability</th>
+                    <th>Result</th>
+                    <th>HeartValue</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+
+                    {% if request.user.patient_set.all.0 %}
+                        <td>{{ i.created|date:"d-m-Y H:i" }}</td>
+                    {% else %}
+                        <td>{{ i.patient.user.first_name }} {{ i.patient.user.last_name }}</td>
+                    {% endif %}
+
+                    <!-- Probability Column (Numeric + %) -->
+                    {% with prob_healthy=i.prob_healthy|default:0 prob_disease=i.prob_disease|default:0 %}
+                        {% if prob_healthy >= prob_disease %}
+                            <td style="color:green; font-weight:bold;">{{ prob_healthy|floatformat:2 }}%</td>
+                        {% else %}
+                            <td style="color:red; font-weight:bold;">{{ prob_disease|floatformat:2 }}%</td>
+                        {% endif %}
+                    {% endwith %}
+
+                    <!-- Result Column -->
+                    <td>
+                        {% if i.result|stringformat:"s" == "0" %}
+                            <h5 style="color:green">Healthy</h5>
+                        {% else %}
+                            <h5 style="color:red">Heart Disease</h5>
+                        {% endif %}
+                    </td>
+
+                    <!-- HeartValue Column -->
+                    <td>{{ i.values_list }}</td>
+
+                    <!-- Action Column -->
+                    <td style="width:150px">
+                        <a href="/delete_searched/{{ i.id }}">
+                            <button class="btn btn-danger" onclick="return confirm('Are you sure?')">
+                                <i class="fa fa-trash-o"></i>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No search logs available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

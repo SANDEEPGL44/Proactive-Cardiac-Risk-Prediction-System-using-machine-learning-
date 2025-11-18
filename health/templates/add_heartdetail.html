@@ -1,0 +1,263 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+
+<section class="logins py-5">
+    <div class="container py-xl-5 py-lg-3">
+        <!-- Title -->
+        <div class="title-section mb-md-5 mb-4 text-center">
+            <h3 class="w3ls-title text-uppercase text-dark font-weight-bold">
+                Heart Disease Risk Assessment
+            </h3>
+            <p class="text-muted">Please fill in all the required medical information</p>
+        </div>
+        <hr/>
+
+        <!-- Error Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="login px-sm-4" style="width:100%; max-width: 1200px; margin: 0 auto;">
+            <form action="" method="post" id="heartForm" novalidate>
+                {% csrf_token %}
+
+                <!-- Row 1: Basic Information -->
+                <div class="form-group row">
+                    <div class="col-md-2 col-sm-6 mb-3">
+                        <label for="age" class="form-label">Age <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="age" name="age" 
+                               min="1" max="120" required 
+                               placeholder="Enter age">
+                        <div class="invalid-feedback">
+                            Please provide a valid age (1-120).
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6 mb-3">
+                        <label for="sex" class="form-label">Sex <span class="text-danger">*</span></label>
+                        <select class="form-control" id="sex" name="sex" required>
+                            <option value="">Select...</option>
+                            <option value="0">Female</option>
+                            <option value="1">Male</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select sex.
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6 mb-3">
+                        <label for="cp" class="form-label">Chest Pain Type <span class="text-danger">*</span></label>
+                        <select class="form-control" id="cp" name="cp" required>
+                            <option value="">Select...</option>
+                            <option value="0">Asymptomatic</option>
+                            <option value="1">Non-anginal Pain</option>
+                            <option value="2">Atypical Angina</option>
+                            <option value="3">Typical Angina</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select chest pain type.
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6 mb-3">
+                        <label for="trestbps" class="form-label">Resting BP (mmHg) <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="trestbps" name="trestbps" 
+                               min="50" max="250" required 
+                               placeholder="e.g., 120">
+                        <div class="invalid-feedback">
+                            Please provide valid BP (50-250 mmHg).
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6 mb-3">
+                        <label for="chol" class="form-label">Cholesterol (mg/dl) <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="chol" name="chol" 
+                               min="100" max="600" required 
+                               placeholder="e.g., 200">
+                        <div class="invalid-feedback">
+                            Please provide valid cholesterol (100-600 mg/dl).
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6 mb-3">
+                        <label for="fbs" class="form-label">Fasting Blood Sugar <span class="text-danger">*</span></label>
+                        <select class="form-control" id="fbs" name="fbs" required>
+                            <option value="">Select...</option>
+                            <option value="0">Normal (≤120 mg/dl)</option>
+                            <option value="1">High (>120 mg/dl)</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select fasting blood sugar level.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 2: Test Results -->
+                <div class="form-group row mt-3">
+                    <div class="col-md-2 col-sm-6 mb-3">
+                        <label for="restecg" class="form-label">Resting ECG <span class="text-danger">*</span></label>
+                        <select class="form-control" id="restecg" name="restecg" required>
+                            <option value="">Select...</option>
+                            <option value="0">Normal</option>
+                            <option value="1">ST-T Abnormality</option>
+                            <option value="2">Left Ventricular Hypertrophy</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select ECG result.
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6 mb-3">
+                        <label for="thalach" class="form-label">Max Heart Rate <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="thalach" name="thalach" 
+                               min="60" max="220" required 
+                               placeholder="e.g., 150">
+                        <div class="invalid-feedback">
+                            Please provide valid heart rate (60-220 bpm).
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6 mb-3">
+                        <label for="exang" class="form-label">Exercise Induced Angina <span class="text-danger">*</span></label>
+                        <select class="form-control" id="exang" name="exang" required>
+                            <option value="">Select...</option>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select if exercise induces angina.
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6 mb-3">
+                        <label for="oldpeak" class="form-label">ST Depression (Oldpeak) <span class="text-danger">*</span></label>
+                        <input type="number" step="0.1" class="form-control" id="oldpeak" name="oldpeak" 
+                               min="0" max="10" required 
+                               placeholder="e.g., 1.0">
+                        <div class="invalid-feedback">
+                            Please provide valid ST depression (0-10).
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6 mb-3">
+                        <label for="slope" class="form-label">ST Segment Slope <span class="text-danger">*</span></label>
+                        <select class="form-control" id="slope" name="slope" required>
+                            <option value="">Select...</option>
+                            <option value="0">Upsloping</option>
+                            <option value="1">Flat</option>
+                            <option value="2">Downsloping</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select ST segment slope.
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6 mb-3">
+                        <label for="ca" class="form-label">Major Vessels (0-4) <span class="text-danger">*</span></label>
+                        <select class="form-control" id="ca" name="ca" required>
+                            <option value="">Select...</option>
+                            <option value="0">0 vessels</option>
+                            <option value="1">1 vessel</option>
+                            <option value="2">2 vessels</option>
+                            <option value="3">3 vessels</option>
+                            <option value="4">4 vessels</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select number of major vessels.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3: Thalassemia -->
+                <div class="form-group row justify-content-center mt-3">
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <label for="thal" class="form-label">Thalassemia <span class="text-danger">*</span></label>
+                        <select class="form-control" id="thal" name="thal" required>
+                            <option value="">Select...</option>
+                            <option value="0">Normal</option>
+                            <option value="1">Fixed Defect</option>
+                            <option value="2">Reversible Defect</option>
+                            <option value="3">Missing /Not recorded</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select thalassemia type.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn submit" style="background-color: #726f6e;">
+                        SEND HEART DATA
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<style>
+.form-label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.form-control:focus {
+    border-color: #726f6e;
+    box-shadow: 0 0 0 0.2rem rgba(114, 111, 110, 0.25);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+.invalid-feedback {
+    display: none;
+}
+
+.form-control.is-invalid ~ .invalid-feedback {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .col-md-2 {
+        margin-bottom: 1rem;
+    }
+}
+</style>
+
+<script>
+// Form validation
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var form = document.getElementById('heartForm');
+        form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    }, false);
+})();
+
+// Add real-time validation feedback
+document.querySelectorAll('.form-control').forEach(function(input) {
+    input.addEventListener('blur', function() {
+        if (this.checkValidity()) {
+            this.classList.remove('is-invalid');
+            this.classList.add('is-valid');
+        } else {
+            this.classList.remove('is-valid');
+            this.classList.add('is-invalid');
+        }
+    });
+});
+</script>
+
+{% endblock %}

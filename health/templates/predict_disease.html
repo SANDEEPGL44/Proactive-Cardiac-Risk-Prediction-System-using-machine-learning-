@@ -1,0 +1,194 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+
+<section class="logins py-5">
+  <div class="container py-xl-5 py-lg-3">
+
+    <!-- Title -->
+    <div class="title-section mb-md-5 mb-4 text-center">
+      <h3 class="w3ls-title text-uppercase text-dark font-weight-bold">
+        Heart Disease Prediction Result
+      </h3>
+    </div>
+    <hr/>
+
+    <!-- Prediction Result -->
+    <div class="login px-sm-12" style="width:100%">
+      <h2 class="text-center" style="color:#414141">Prediction Summary</h2>
+      <hr>
+
+      <div class="text-center">
+        <p><b>🔹 Model Accuracy:</b> {{ accuracy }}%</p>
+        <p><b>🔹 Result:</b>
+          {% if pred|stringformat:"s" == "0" %}
+            <span style="color:green;font-size:18px"><strong>You are healthy ✅</strong></span>
+          {% else %}
+            <span style="color:red;font-size:18px"><strong>You may have a risk of heart disease ⚠️</strong></span>
+          {% endif %}
+        </p>
+
+        <!-- ✅ Prediction Probability bold and black -->
+        <p>
+          <b>🔹 Probability:</b>
+          <span style="color:rgb(7, 108, 37); font-weight:bold;">
+            {{ probability_label }} - {{ probability_value|floatformat:2 }} %
+          </span>
+        </p>
+      </div>
+
+      <!-- ================= Compact ECG Graph with 5-sec Alarm ================= -->
+      {{ prob_healthy|json_script:"prob_healthy_js" }}
+      {{ prob_disease|json_script:"prob_disease_js" }}
+
+      <div class="ecg-container" style="max-width:600px;">
+        <div class="ecg-title text-center" style="color:black; font-weight:bold;">Prediction Probability</div>
+        <div class="ecg-wrapper">
+          <canvas id="ecgCanvas" width="600" height="200"></canvas>
+          <!-- ECG label in top-right corner -->
+          <div style="position:absolute; top:5px; right:10px; color:#0f0; font-weight:bold; font-family:'Courier New', monospace; font-size:16px;">ECG</div>
+          <div id="warningText" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:red; font-size:28px; font-weight:bold; text-shadow: 1px 1px 4px rgb(189, 16, 16);">
+            ⚠️ High Risk! ⚠️
+          </div>
+        </div>
+      </div>
+
+      <style>
+        .ecg-container {
+          margin: 30px auto;
+        }
+        .ecg-title {
+          font-weight: bold;
+          font-size: 18px;
+          margin-bottom: 8px;
+          color: black;
+          font-family: 'Courier New', monospace;
+        }
+        .ecg-wrapper {
+          position: relative;
+          background: #000;
+          border: 2px solid #0f0;
+          border-radius: 10px;
+          overflow: hidden;
+        }
+      </style>
+
+      <script>
+        const probHealthy = parseFloat(document.getElementById("prob_healthy_js").textContent);
+        const probDisease = parseFloat(document.getElementById("prob_disease_js").textContent);
+
+        const canvas = document.getElementById('ecgCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+
+        const warningText = document.getElementById('warningText');
+        const isHealthy = probHealthy >= probDisease;
+
+        // Play 5-second alarm for heart disease
+        if(!isHealthy){
+          warningText.style.display = "block";
+          const audio = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
+          audio.play();
+          setTimeout(() => { audio.pause(); audio.currentTime = 0; }, 5000);
+        }
+
+        // ECG waveform data
+        const dataPoints = width;
+        let data = [];
+        for(let i=0;i<dataPoints;i++) data.push(height/2);
+
+        function generateECGPoint(x){
+          const base = height/2;
+          const amplitude = isHealthy ? 50 : 50; // slightly bigger amplitude for healthy
+          const frequency = isHealthy ? 0.08 : 0.05; // faster frequency for healthy
+          let y = base + amplitude * Math.sin(frequency * x) * Math.exp(-0.001 * x);
+          if(!isHealthy){
+            y += Math.random()*20 - 10; // irregular spikes for disease
+          }
+          return y;
+        }
+
+        function drawECG(){
+          ctx.fillStyle = "#000";
+          ctx.fillRect(0, 0, width, height);
+          ctx.beginPath();
+          ctx.strokeStyle = isHealthy ? "#0f0" : "#f44336";
+          ctx.lineWidth = 2.5;
+          for(let i=0;i<data.length;i++){
+            let y = generateECGPoint(i + data.length);
+            if(i===0) ctx.moveTo(i, y);
+            else ctx.lineTo(i, y);
+          }
+          ctx.stroke();
+        }
+
+        let offset = 0;
+        function animateECG(){
+          offset += isHealthy ? 2 : 2; // faster movement for healthy
+          data.push(offset);
+          if(data.length > dataPoints) data.shift();
+          drawECG();
+          requestAnimationFrame(animateECG);
+        }
+
+        animateECG();
+      </script>
+      <!-- ================= End Compact ECG Graph ================= -->
+
+    </div>
+
+    <!-- Doctor Recommendation Section -->
+    {% if pred|stringformat:"s" != "0" %}
+    <div class="container-fluid" style="width:90%;margin-top:3%">
+      <div class="text-center mb-3">
+        <h2 class="w3ls-title text-uppercase text-dark font-weight-bold">
+          Recommended Doctors Near You
+        </h2>
+      </div>
+      <hr>
+
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th>#</th>
+              <th>Image</th>
+              <th>Full Name</th>
+              <th>Email</th>
+              <th>Contact</th>
+              <th>Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for doc in doctor %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>
+                {% if doc.image %}
+                  <img src="{{ doc.image.url }}" alt="{{ doc.user.first_name }} {{ doc.user.last_name }}" style="width:80px;height:90px;object-fit:cover;border-radius:6px;">
+                {% else %}
+                  <span>No Image</span>
+                {% endif %}
+              </td>
+              <td>{{ doc.user.first_name }} {{ doc.user.last_name }}</td>
+              <td>{{ doc.user.email }}</td>
+              <td>{{ doc.contact }}</td>
+              <td>{{ doc.address }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="text-center">No doctors available in your area.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+    <!-- End Doctor Recommendation Section -->
+
+  </div>
+</section>
+
+{% endblock %}
