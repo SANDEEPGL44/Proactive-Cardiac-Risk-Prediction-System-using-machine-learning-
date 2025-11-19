@@ -40,12 +40,6 @@ Logistic Regression
 
 Gradient Boosting
 
-Random Forest
-
-SVM
-
-KNN
-
 Final model selected based on highest accuracy.
 
 Input Features Include:
