@@ -117,8 +117,6 @@ Logistic Regression: 84%
 
 Gradient Boosting: 90%
 
-Random Forest: 88%
-
 🤝 Contributing
 
 Pull requests are welcome!
