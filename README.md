@@ -1,99 +1,54 @@
-❤️ Proactive Cardiac Risk Prediction System Using Machine Learning
+🫀 Proactive Cardiac Risk Prediction System Using Machine Learning
 
-A full-stack web application that proactively predicts the risk of cardiac (heart) disease using trained Machine Learning models.
-This system helps patients, doctors, and administrators access predictions, manage records, and analyze health data using an interactive Django-based interface.
+A Machine Learning–based web application designed to predict heart disease risk using clinical parameters.
+This project aims to assist early diagnosis by providing a prediction model integrated into a user-friendly interface.
 
-🚀 Project Overview
+🚀 Features
 
-The Proactive Cardiac Risk Prediction System predicts whether a person is at high risk of developing heart disease based on clinical attributes.
-It integrates a machine learning model, deployed inside a Django web framework, with three user roles:
+✔ Machine Learning Model for predicting heart disease risk
 
-Admin
+✔ Django Web Application with clean UI
 
-Doctor
+✔ Admin, Doctor & Patient Roles
 
-Patient
+✔ User Authentication – Login, Signup
 
-The system is designed for clinical analysis, healthcare decision support, and academic demonstration.
+✔ Patient Dashboard with prediction history
 
-⭐ Key Features
-🔐 Authentication & Roles
+✔ Doctor Dashboard to view patient records
 
-Secure Login & Signup
+✔ Feedback System
 
-Admin / Doctor / Patient access levels
+✔ Mobile-friendly UI
 
-Profile management
+📁 Project Structure
+Heart-Disease-Prediction-System-main/
+│── dataset/                 # CSV data for ML training
+│── model/                   # Trained ML model (pickle)
+│── static/                  # CSS, JS, Images
+│── templates/               # HTML Templates
+│── heart/                   # Main Django App
+│── manage.py                # Django project runner
+└── requirements.txt         # Dependencies
 
-🧑‍💼 Patient Module
+🧠 Machine Learning Model
 
-Enter health attributes
+The model is trained using the Heart Disease UCI dataset.
+Algorithms used:
 
-View prediction results
+Logistic Regression
 
-See prediction history
+Gradient Boosting
 
-Edit personal profile
+Random Forest
 
-Submit feedback
+SVM
 
-👨‍⚕️ Doctor Module
+KNN
 
-Access patient health records
+Final model selected based on highest accuracy.
 
-Analyze prediction outcomes
-
-Provide medical remarks
-
-Edit profile
-
-🛠️ Admin Module
-
-Manage doctors
-
-Manage patients
-
-View all predictions
-
-Manage feedback
-
-Control model/dataset updates
-
-🤖 Machine Learning Integration
-
-Cleaned and preprocessed dataset
-
-Trained classification models
-
-Model saved as .pkl
-
-Real-time prediction execution
-
-🧠 Machine Learning Details
-🧪 Algorithms Used
-
-Multiple ML models were trained and evaluated:
-
---> Logistic Regression
-
---> Gradient Boosting
-
-The best-performing model was deployed based on:
-
-Accuracy
-
-Precision
-
-Recall
-
-F1-score
-
-Confusion Matrix
-
-📌 Final Deployed Model File
-ml_model/cardiac_risk_model.pkl
-
-🩺 Input Features
+Input Features Include:
 
 Age
 
@@ -101,111 +56,74 @@ Sex
 
 Chest Pain Type
 
-Resting Blood Pressure
+Resting BP
 
-Serum Cholesterol
+Cholesterol
 
 Fasting Blood Sugar
 
-Rest ECG
+Resting ECG
 
-Max Heart Rate
+Maximum Heart Rate
 
-Exercise Induced Angina
+Exercise-Induced Angina
 
-ST Depression (Oldpeak)
+Oldpeak (ST Depression)
 
 Slope
 
-Major Vessels (0–3)
+Major Vessels
 
-Thalassemia (0–3)
+Thalassemia
 
 🛠 Tech Stack
-Frontend
 
-HTML5
+Frontend: HTML, CSS, Bootstrap
+Backend: Django
+ML: Python, scikit-learn, NumPy, Pandas
+Database: SQLite / MySQL
 
-CSS3
+▶ How to Run the Project
+1. Clone the Repository
+git clone https://github.com/your-username/Heart-Disease-Prediction-System-main.git
+cd Heart-Disease-Prediction-System-main
 
-Bootstrap
-
-JavaScript
-
-Backend
-
-Python
-
-Django
-
-SQLite / MySQL
-
-ML Libraries
-
-scikit-learn
-
-numpy
-
-pandas
-
-📂 Project Structure
-ProactiveCardiacRiskPrediction/
-│── core/
-│── accounts/
-│── doctor/
-│── patient/
-│── prediction/
-│── ml_model/
-│── static/
-│── templates/
-│── manage.py
-│── requirements.txt
-
-⚙️ Installation & Setup
-1️⃣ Clone the Repository
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
-
-2️⃣ Create Virtual Environment
+2. Create Virtual Environment
 python -m venv venv
-venv\Scripts\activate       # Windows
-source venv/bin/activate   # Linux/Mac
+source venv/bin/activate  # Mac/Linux
+venv\Scripts\activate     # Windows
 
-3️⃣ Install Dependencies
+3. Install Requirements
 pip install -r requirements.txt
 
-4️⃣ Apply Migrations
+4. Run Migrations
 python manage.py migrate
 
-5️⃣ Start the Server
+5. Run Server
 python manage.py runserver
 
-6️⃣ Visit the App
+6. Open in Browser
 http://127.0.0.1:8000/
 
-🔑 Default Admin Login
+🔐 Default Admin Credentials (If Applicable)
 Username: admin
 Password: admin123
 
-🔮 Future Enhancements
+📊 Model Accuracy
 
-Deep Learning-based cardiac prediction
+Add your accuracy results here, e.g.:
 
-PDF report export
+Logistic Regression: 84%
 
-REST API for mobile app
+Gradient Boosting: 90%
 
-IoT device integration for live vitals
+Random Forest: 88%
 
-Email/SMS alerts for high-risk cases
+🤝 Contributing
 
-📄 License
+Pull requests are welcome!
+For major changes, please open an issue to discuss your idea.
+
+📜 License
 
 This project is licensed under the MIT License.
-
-👨‍💻 Author
-
-Sandeep G L
-Machine Learning Engineer | Python & Django Developer
-GitHub: github.com/SANDEEPGL44
-LinkedIn: linkedin.com/in/sandeep-g-l-98a903231
