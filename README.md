@@ -187,14 +187,6 @@ http://127.0.0.1:8000/
 Username: admin
 Password: admin123
 
-🖼 Screenshots
-
-(Add your screenshots under /images/)
-
-![Home](images/home.png)
-![Prediction Form](images/predict.png)
-![Dashboard](images/dashboard.png)
-
 🔮 Future Enhancements
 
 Deep Learning-based cardiac prediction
